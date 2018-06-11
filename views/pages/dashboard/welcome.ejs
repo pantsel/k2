@@ -1,0 +1,191 @@
+<div id="welcome">
+  <div class="container">
+    <h1>Welcome to Konga!</h1>
+    <hr/>
+    <p>The first thing you need to do is setup a connection to Kong's admin API.</p>
+    <p>This will make Konga capable of managing your Kong instances.</p>
+    <div class="buttons">
+      <button class="btn btn-outline-info ml-2" @click="clickOpenDashboardModalButton()">
+        Setup Connection
+      </button>
+    </div>
+  </div>
+
+  <modal class="example-modal" v-if="dashboardModalVisible" @close="closeDashboardModal()" v-cloak>
+    <div class="modal-header">
+      <h2 class="modal-title">Kong Connection</h2>
+      <p>Setup a new connection to Kong's admin API</p>
+      <hr/>
+      <button type="button" class="modal-close-button" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-danger" v-if="cloudError">
+          {{parseCloudError()}}
+      </div>
+      <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active"
+             id="pills-basic-tab" data-toggle="pill"
+             @click="setConnectionType('basic')"
+             href="#pills-basic" role="tab"
+             aria-controls="pills-home" aria-selected="true">
+            <strong>BASIC</strong>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+             @click="setConnectionType('key-auth')"
+             id="pills-apikey-tab" data-toggle="pill" href="#pills-apikey" role="tab" aria-controls="pills-profile" aria-selected="false">
+            <strong>KEY AUTH</strong>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+             @click="setConnectionType('jwt-auth')"
+             id="pills-jwt-tab" data-toggle="pill" href="#pills-jwt" role="tab" aria-controls="pills-contact" aria-selected="false">
+            <strong>JWT AUTH</strong>
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-basic" role="tabpanel">
+          <p class="text-secondary">
+            Konga will connect directly to Kong.
+            This method is mainly suitable for demo scenarios or internal access (ex. localhost).
+            Kong's admin API <span class="text-danger">should not be publicly exposed</span>.
+          </p>
+
+          <ajax-form action="createKongConnection" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+            <input type="hidden" name="type" v-model.trim="formData.type">
+            <div class="form-group">
+              <label>Name <span class="text-danger">*</span></label>
+              <input name="name" class="form-control"
+                     :class="[formErrors.name ? 'is-invalid' : '']" v-model.trim="formData.name"
+                     placeholder="A unique connection name...">
+              <div class="invalid-feedback" v-if="formErrors.name">Please enter a connection name.</div>
+            </div>
+            <div class="form-group">
+              <label>Kong Admin URL <span class="text-danger">*</span></label>
+              <input type="url"
+                     name="url"
+                     :class="[formErrors.url ? 'is-invalid' : '']" v-model.trim="formData.url"
+                     class="form-control" placeholder="The URL to Kong's admin API...">
+              <div class="invalid-feedback" v-if="formErrors.url">Please enter a valid url.</div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="form-group">
+              <ajax-button type="submit" :syncing="syncing"
+                           class="btn btn-outline-info btn-lg btn-block">Create Connection</ajax-button>
+            </div>
+          </ajax-form>
+
+
+        </div>
+        <div class="tab-pane fade" id="pills-apikey" role="tabpanel">
+          <p class="text-secondary">
+            Konga will connect to Kong via an exposed "loop-back" API using key authentication.
+            <a href="https://getkong.org/docs/latest/secure-admin-api/#kong-api-loopback" target="_blank">
+              Check out how to setup a "loop-back" API.
+            </a>
+          </p>
+
+          <ajax-form action="createKongConnection" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+            <input type="hidden" name="type" v-model.trim="formData.type">
+            <div class="form-group">
+              <label>Name <span class="text-danger">*</span></label>
+              <input name="name" class="form-control"
+                     :class="[formErrors.name ? 'is-invalid' : '']" v-model.trim="formData.name"
+                     placeholder="A unique connection name...">
+              <div class="invalid-feedback" v-if="formErrors.name">Please enter a connection name.</div>
+            </div>
+            <div class="form-group">
+              <label>Kong Admin URL <span class="text-danger">*</span></label>
+              <input type="url"
+                     name="url"
+                     :class="[formErrors.url ? 'is-invalid' : '']" v-model.trim="formData.url"
+                     class="form-control" placeholder="The URL to Kong's admin API...">
+              <div class="invalid-feedback" v-if="formErrors.url">Please enter a valid url.</div>
+            </div>
+            <div class="form-group">
+              <label>API key <span class="text-danger">*</span></label>
+              <input type="text" name="apiKey"
+                     :class="[formErrors.url ? 'is-invalid' : '']" v-model.trim="formData.apiKey"
+                     class="form-control" placeholder="The `apikey` parameter...">
+              <div class="invalid-feedback" v-if="formErrors.apiKey">The field is required.</div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="form-group">
+              <ajax-button type="submit" :syncing="syncing"
+                           class="btn btn-outline-info btn-lg btn-block">Create Connection</ajax-button>
+            </div>
+          </ajax-form>
+
+
+
+
+        </div>
+        <div class="tab-pane fade" id="pills-jwt" role="tabpanel">
+          <p class="text-secondary">
+            Konga will connect to Kong via an exposed "loop-back" API using JWT authentication.
+            <a href="https://getkong.org/docs/latest/secure-admin-api/#kong-api-loopback" target="_blank">
+              Check out how to setup a "loop-back" API.
+            </a>
+          </p>
+
+
+          <ajax-form action="createKongConnection" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+            <input type="hidden" name="type" v-model.trim="formData.type">
+            <div class="form-group">
+              <label>Name <span class="text-danger">*</span></label>
+              <input name="name" class="form-control"
+                     :class="[formErrors.name ? 'is-invalid' : '']" v-model.trim="formData.name"
+                     placeholder="A unique connection name...">
+              <div class="invalid-feedback" v-if="formErrors.name">Please enter a connection name.</div>
+            </div>
+            <div class="form-group">
+              <label>Kong Admin URL <span class="text-danger">*</span></label>
+              <input type="url"
+                     name="url"
+                     :class="[formErrors.url ? 'is-invalid' : '']" v-model.trim="formData.url"
+                     class="form-control" placeholder="The URL to Kong's admin API...">
+              <div class="invalid-feedback" v-if="formErrors.url">Please enter a valid url.</div>
+            </div>
+            <div class="form-group">
+              <label>Algorithm</label>
+              <select name="jwtAlgorithm"
+                      :class="[formErrors.jwtAlgorithm ? 'is-invalid' : '']" v-model.trim="formData.jwtAlgorithm"
+                      class="form-control">
+                <option value="HS256">HS256</option>
+                <option value="RS256">RS256</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Key <span class="text-danger">*</span></label>
+              <input name="jwtIdentificationKey"
+                     :class="[formErrors.jwtIdentificationKey ? 'is-invalid' : '']" v-model.trim="formData.jwtIdentificationKey"
+                     class="form-control" placeholder="The JWT identification key...">
+              <div class="invalid-feedback" v-if="formErrors.jwtIdentificationKey">The field is required.</div>
+            </div>
+            <div class="form-group">
+              <label>Secret <span class="text-danger">*</span></label>
+              <input name="jwtSecret"
+                     :class="[formErrors.jwtSecret ? 'is-invalid' : '']" v-model.trim="formData.jwtSecret"
+                     class="form-control" placeholder="The JWT secret...">
+              <div class="invalid-feedback" v-if="formErrors.jwtSecret">The field is required.</div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="form-group">
+              <ajax-button type="submit" :syncing="syncing"
+                           class="btn btn-outline-info btn-lg btn-block">Create Connection</ajax-button>
+            </div>
+          </ajax-form>
+
+
+        </div>
+      </div>
+    </div>
+  </modal>
+
+</div>
+
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
