@@ -1,4 +1,4 @@
-# konga-2
+# k2
 
 a [Sails v1](https://sailsjs.com) application
 
