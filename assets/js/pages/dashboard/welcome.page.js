@@ -1,3 +1,4 @@
+
 parasails.registerPage('welcome', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -9,13 +10,13 @@ parasails.registerPage('welcome', {
     syncing: false,
 
     // Form data
-    formData: {
+    createConnectionFormData: {
       type: 'basic',
       jwtAlgorithm: "HS256"
     },
 
     // For tracking client-side validation errors in our form.
-    // > Has property set to `true` for each invalid property in `formData`.
+    // > Has property set to `true` for each invalid property in `createConnectionFormData`.
     formErrors: {/* … */},
 
     // Server error state for the form
@@ -31,6 +32,8 @@ parasails.registerPage('welcome', {
   },
   mounted: async function () {
 
+    console.log(this.__proto__);
+    this.flash('Data loaded', 'success');
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -39,7 +42,7 @@ parasails.registerPage('welcome', {
   methods: {
 
     setConnectionType: function(type) {
-      this.formData.type = type;
+      this.createConnectionFormData.type = type;
     },
 
     clickOpenDashboardModalButton: async function () {
@@ -62,7 +65,7 @@ parasails.registerPage('welcome', {
       // Clear out any pre-existing error messages.
       this.formErrors = {};
 
-      var argins = this.formData;
+      var argins = this.createConnectionFormData;
 
       // Validate name:
       if (!argins.name) {
@@ -100,7 +103,6 @@ parasails.registerPage('welcome', {
       }
 
 
-      console.log(this.formErrors);
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be
       // cancelled.)
@@ -108,7 +110,6 @@ parasails.registerPage('welcome', {
         return;
       }
 
-      console.log("The form is valid");
 
       return argins;
     },

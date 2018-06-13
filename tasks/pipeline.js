@@ -77,6 +77,7 @@ var jsFilesToInject = [
   'js/cloud.setup.js',
 
   // Bring in components & utilities before bringing in the rest (i.e. page scripts)
+  'js/plugins/**/*.js',
   'js/components/**/*.js',
   'js/utilities/**/*.js',
 
