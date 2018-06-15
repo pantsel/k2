@@ -29,51 +29,59 @@ const defaultTemplate = `
 \`;
   `
 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 function isFunction(functionToCheck) {
   const getType = {};
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
-var FlashMessage = function(Bus, messageContent, messageType, messageOptions, globalDefaults) {
+class FlashMessage {
+  constructor(Bus, messageContent, messageType, messageOptions, globalDefaults) {
+    const defaults = {
+      autoEmit: true,
+      important: false,
+      pauseOnInteract: false,
+      timeout: 0,
 
-  const defaults = {
-    autoEmit: true,
-    important: false,
-    pauseOnInteract: false,
-    timeout: 0,
+      // callbacks
+      beforeDestroy: null,
+      onStartInteract: null,
+      onCompleteInteract: null,
+    };
+    this.storage = Bus;
+    this.content = messageContent;
+    this.options = Object.assign(defaults, globalDefaults, messageOptions);
+    this.type = messageType;
+    this.id = uuidv4();
+    this.timer = null;
 
-    // callbacks
-    beforeDestroy: null,
-    onStartInteract: null,
-    onCompleteInteract: null,
-  };
-  this.storage = Bus;
-  this.content = messageContent;
-  this.options = Object.assign(defaults, globalDefaults, messageOptions);
-  this.type = messageType;
-  this.id = uuidv4();
-  this.timer = null;
-
-  if (this.options.autoEmit) {
-    this.emit();
+    if (this.options.autoEmit) {
+      this.emit();
+    }
   }
 
-  this.emit = function() {
+  emit() {
     this.storage.push(this.id, this);
     this.startSelfDestructTimer();
   }
 
-  this.destroy = function() {
+  destroy() {
     this.killSelfDestructTimer();
     this.beforeDestroy();
     this.storage.destroy(this.id);
   }
 
-  this.setSelfDestructTimeout = function(timeout) {
+  setSelfDestructTimeout(timeout) {
     this.options.timeout = timeout;
   }
 
-  this.startSelfDestructTimer = function() {
+  startSelfDestructTimer() {
     if (this.options.timeout > 0) {
       setTimeout(() => {
         this.destroy();
@@ -81,17 +89,17 @@ var FlashMessage = function(Bus, messageContent, messageType, messageOptions, gl
     }
   }
 
-  this.killSelfDestructTimer = function() {
+  killSelfDestructTimer() {
     clearTimeout(this.timer);
   }
 
-  this.beforeDestroy = function() {
+  beforeDestroy() {
     if (isFunction(this.options.beforeDestroy)) {
       this.options.beforeDestroy();
     }
   }
 
-  this.onStartInteract = function() {
+  onStartInteract() {
     if (this.options.pauseOnInteract) {
       this.killSelfDestructTimer();
     }
@@ -100,7 +108,7 @@ var FlashMessage = function(Bus, messageContent, messageType, messageOptions, gl
     }
   }
 
-  this.onCompleteInteract = function() {
+  onCompleteInteract() {
     if (this.options.pauseOnInteract) {
       this.startSelfDestructTimer();
     }
@@ -108,9 +116,8 @@ var FlashMessage = function(Bus, messageContent, messageType, messageOptions, gl
       this.options.onCompleteInteract();
     }
   }
-
-  return this;
 }
+
 
 
 var FlashMessageComponent = function({
