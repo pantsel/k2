@@ -41,11 +41,6 @@
   exposeUMD(this, factory);
 })(function (_, io, $, SAILS_LOCALS, location, File, FormData){
 
-  // # Addition when using webpack
-  if(!SAILS_LOCALS) {
-    SAILS_LOCALS = window.SAILS_LOCALS
-  }
-
   //  ██████╗ ██████╗ ██╗██╗   ██╗ █████╗ ████████╗███████╗
   //  ██╔══██╗██╔══██╗██║██║   ██║██╔══██╗╚══██╔══╝██╔════╝
   //  ██████╔╝██████╔╝██║██║   ██║███████║   ██║   █████╗

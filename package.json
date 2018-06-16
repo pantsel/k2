@@ -10,21 +10,33 @@
     "@sailshq/socket.io-redis": "^5.2.0",
     "async": "2.0.1",
     "bootstrap-vue": "^2.0.0-rc.11",
+    "bowser": "^1.9.3",
     "connect-mongo": "1.1.0",
+    "jquery": "^3.3.1",
+    "parasails": "^0.7.4",
     "sails": "^1.0.2",
     "sails-hook-apianalytics": "^2.0.0",
     "sails-hook-organics": "^0.13.0",
     "sails-hook-orm": "^2.0.0-16",
     "sails-hook-sockets": "^1.4.0",
     "sails-mongo": "^1.0.1",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@sailshq/eslint": "^4.19.3",
     "@sailshq/htmlhint": "^0.9.16",
     "@sailshq/lesshint": "^4.6.6",
-    "grunt": "1.0.1",
-    "sails-hook-grunt": "^3.0.2"
+    "clean-webpack-plugin": "0.1.16",
+    "copy-webpack-plugin": "4.0.1",
+    "css-loader": "0.27.3",
+    "ejs-loader": "0.3.0",
+    "extract-text-webpack-plugin": "2.1.0",
+    "less": "2.7.2",
+    "less-loader": "4.0.1",
+    "sails.io.js": "1.1.9",
+    "socket.io-client": "1.7.3",
+    "webpack": "2.2.1"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",

@@ -32,7 +32,6 @@ parasails.registerPage('welcome', {
   },
   mounted: async function () {
 
-    console.log(this.__proto__);
     this.flash('Data loaded', 'success');
   },
 
