@@ -31,7 +31,12 @@ parasails.registerPage('welcome', {
     _.extend(this, SAILS_LOCALS);
   },
   mounted: async function () {
-
+    // this.$notify({
+    //   group: 'app',
+    //   title: 'Important message',
+    //   text: 'Hello user! This is a notification!'
+    // });
+    this.$awn.success("Your custom message")
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

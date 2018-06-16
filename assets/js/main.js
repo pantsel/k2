@@ -1,4 +1,5 @@
 require('../styles/importer.less')
+require("vue-awesome-notifications/dist/styles/style.css")
 
 
 window.io = require('../dependencies/sails.io');
@@ -9,6 +10,11 @@ window.parasails = require('../dependencies/parasails')
 // Cloud & cloud setup
 window.Cloud = require('../dependencies/cloud')
 require('./cloud.setup')
+
+import Vue from "vue"
+import VueAWN from "vue-awesome-notifications"
+
+Vue.use(VueAWN)
 
 
 
