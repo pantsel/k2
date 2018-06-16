@@ -9,6 +9,7 @@
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
     "async": "2.0.1",
+    "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.11",
     "bowser": "^1.9.3",
     "connect-mongo": "1.1.0",
