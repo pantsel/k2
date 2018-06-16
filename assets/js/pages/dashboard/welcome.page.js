@@ -31,12 +31,8 @@ parasails.registerPage('welcome', {
     _.extend(this, SAILS_LOCALS);
   },
   mounted: async function () {
-    // this.$notify({
-    //   group: 'app',
-    //   title: 'Important message',
-    //   text: 'Hello user! This is a notification!'
-    // });
-    this.$awn.success("Your custom message")
+
+
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -61,7 +57,9 @@ parasails.registerPage('welcome', {
       // > (Note that we re-enable the syncing state here.  This is on purpose--
       // > to make sure the spinner stays there until the page navigation finishes.)
       this.syncing = true;
-      window.location = '/';
+      this.$awn.success("Connection Created")
+      this.closeDashboardModal();
+      // window.location = '/';
     },
 
     handleParsingForm: function () {
