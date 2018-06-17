@@ -21,12 +21,30 @@ html, body {
         &:before {
           vertical-align: middle;
         }
+        opacity: .7;
+      }
+
+      &.active {
+        background-color: lighten(@color-dark, 5%);
+        position: relative;
+        &:before{
+          content: '';
+          position: absolute;
+          top: 0;
+          width: 3px;
+          height: 100%;
+          background-color: @color-primary;
+        }
+
+        //.mdi {
+        //  color: @color-primary;
+        //}
       }
 
       a {
         padding: 0.5rem 1rem;
         color: white;
-        font-size: .8rem;
+        font-size: .9rem;
       }
 
       &.nav-item-header {
