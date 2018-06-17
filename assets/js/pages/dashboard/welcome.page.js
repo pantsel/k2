@@ -32,7 +32,6 @@ parasails.registerPage('welcome', {
   },
   mounted: async function () {
 
-
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

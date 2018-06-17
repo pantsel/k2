@@ -1,5 +1,6 @@
 require('../styles/importer.less')
 require("vue-awesome-notifications/dist/styles/style.css")
+require('bootstrap-vue/dist/bootstrap-vue.css');
 
 
 window.io = require('../dependencies/sails.io');
@@ -13,8 +14,10 @@ require('./cloud.setup')
 
 import Vue from "vue"
 import VueAWN from "vue-awesome-notifications"
+import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(VueAWN)
+Vue.use(BootstrapVue)
 
 
 

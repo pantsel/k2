@@ -8,10 +8,42 @@ html, body {
   margin: 0;
 }
 
+.main-container, .main-container-content {
+  height: 100%;
+  #sidebar {
+    background-color: lighten(@color-dark, 3%);
+    .nav-item {
+      text-transform: uppercase;
+
+      .mdi {
+        font-size: 1.3rem;
+        margin-right: .5rem;
+        &:before {
+          vertical-align: middle;
+        }
+      }
+
+      a {
+        padding: 0.5rem 1rem;
+        color: white;
+        font-size: .8rem;
+      }
+
+      &.nav-item-header {
+        padding: 1.5rem 1rem 0.5rem 1rem;
+        color: white;
+        font-size: .8rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
 #page-wrap {
   .stretch-page();
   position: relative;
   padding-bottom: @footer-height;
+  background-color: @color-offWhite;
 
   header {
     a {

@@ -59,7 +59,8 @@ module.exports.webpack = {
       {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract({ use: 'css-loader!less-loader' })
-      }
+      },
+      { test: /\.(ttf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=/styles/[name].[ext]" }
     ],
   },
 
